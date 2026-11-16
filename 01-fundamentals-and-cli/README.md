@@ -1,48 +1,40 @@
 # 01 - Fundamentals and CLI Application
 
-Welcome to Module 01! This module establishes the core foundational mechanics of Rust and walks through building a functional CLI application.
+A complete, beginner-friendly CLI application demonstrating the foundational pillars of Rust.
 
 ---
 
-## 📌 Concepts Covered
+## 📌 Concepts Mastered
 
-1. **Rust Toolchain & Cargo Workspace Architecture**
-   - How `Cargo.toml` manages package manifests, binaries, and dependencies.
-   - Using `cargo check`, `cargo build`, and `cargo run`.
-
-2. **Variables, Mutability & Safety**
+1. **Variables & Mutability**
    - Immutability by default (`let`).
-   - Explicit mutable declaration (`let mut`).
-   - Why compiler-enforced immutability prevents data race conditions.
+   - Explicit mutability (`let mut input = String::new();`).
 
-3. **Shadowing vs Mutation**
-   - Re-declaring variables with `let` to reuse identifier names.
-   - Changing types during sequential transformations (e.g., `&str` -> `u32`).
+2. **Standard I/O & Borrowing Basics**
+   - Reading lines from standard input (`io::stdin().read_line(&mut input)`).
+   - Passing a mutable reference `&mut` to allow the function to populate the buffer without taking ownership.
 
-4. **Data Types**
-   - **Scalars**: `i32`/`u32` (integers), `f64` (floats), `bool` (booleans), `char` (4-byte Unicode scalar).
-   - **Compounds**: Tuples (fixed size, heterogeneous) and Arrays (fixed size, homogeneous, stack-allocated).
+3. **Shadowing**
+   - Transforming text to a clean trimmed slice (`let input = input.trim();`).
+   - Re-declaring identifiers across transformations.
 
-5. **Statements vs. Expressions**
-   - Statements perform actions without returning values (`let x = 5;`).
-   - Expressions evaluate to values (`x + 1` without semicolon).
-   - Implicit function return values.
+4. **Pattern Matching with `Result<T, E>`**
+   - Handling operations that can fail without runtime exceptions or crashes.
+   - Matching on `Ok(num)` vs `Err(_)`.
 
-6. **Console I/O & CLI Args**
-   - Inspecting command-line arguments via `std::env::args()`.
-   - Flushing stdout and reading lines via `std::io::stdin()`.
-   - Handling input parsing and fallback values.
+5. **Looping with Return Values**
+   - Using `loop` as an expression.
+   - Using `break num;` to exit the loop and return a value directly into a variable.
+
+6. **Expressions vs. Statements**
+   - `if` / `else` as an expression that evaluates directly to a value.
+   - Functions with implicit expression returns (`price * quantity` without `return` or `;`).
 
 ---
 
 ## 🚀 How to Run
 
-From the root of the workspace:
+From the root directory:
 ```bash
 cargo run -p fundamentals_and_cli
-```
-
-Or pass CLI flags:
-```bash
-cargo run -p fundamentals_and_cli -- --help
 ```

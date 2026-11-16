@@ -1,129 +1,76 @@
-use std::env;
-use std::io::{self, Write};
+use std::io;
 
 fn main() {
     println!("==================================================");
-    println!("   🦀 Module 01: Rust Fundamentals & CLI Engine   ");
+    println!("       🦀 Module 01: Price Calculator CLI         ");
     println!("==================================================");
 
-    // 1. Command-Line Arguments Parsing
-    let args: Vec<String> = env::args().collect();
-    
-    // Demonstrate CLI arguments handling
-    if args.len() > 1 && (args[1] == "--help" || args[1] == "-h") {
-        print_usage(&args[0]);
-        return;
-    }
+    // 1. Prompt user for item price using a loop with error handling
+    let price: i32 = loop {
+        println!("Enter the item price:");
 
-    println!("\n[1] Type System & Immutability");
-    demonstrate_types_and_mutability();
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
 
-    println!("\n[2] Shadowing & Transformations");
-    demonstrate_shadowing();
+        // Trim newline and attempt parsing
+        let input = input.trim();
 
-    println!("\n[3] Interactive Age & Category Calculator");
-    run_interactive_cli();
-}
+        // Pattern match: either break with the valid number or ask again
+        match input.parse() {
+            Ok(num) => break num,
+            Err(_) => println!(" [!] That's not a valid number. Please try again!\n"),
 
-fn print_usage(program_name: &str) {
-    println!("Usage: {program_name} [options]");
-    println!("Options:");
-    println!("  -h, --help    Show this help message");
-}
-
-fn demonstrate_types_and_mutability() {
-    // Scalar Types
-    let integer: i32 = 42;
-    let float: f64 = 3.14159;
-    let boolean: bool = true;
-    let character: char = '🦀'; // Rust char is 4-byte Unicode scalar value!
-
-    // Immutability vs Mutability
-    let immutable_val = 10;
-    let mut mutable_counter = 0;
-    mutable_counter += 5;
-
-    // Compound Types
-    let tuple_person: (&str, u32, bool) = ("Ferris", 9, true);
-    let (name, age, is_mascot) = tuple_person; // Destructuring
-
-    let numbers_array: [i32; 4] = [10, 20, 30, 40]; // Fixed size on stack
-
-    println!("  Scalars: int={integer}, float={float}, bool={boolean}, char={character}");
-    println!("  Immutable: {immutable_val}, Mutated: {mutable_counter}");
-    println!("  Tuple: name={name}, age={age}, mascot={is_mascot}");
-    println!("  Array: len={}, first={}", numbers_array.len(), numbers_array[0]);
-}
-
-fn demonstrate_shadowing() {
-    let raw_input = "   1024   ";
-    println!("  Initial &str: \"{raw_input}\"");
-
-    // Shadow 1: Trim whitespace, keeping &str
-    let raw_input = raw_input.trim();
-    println!("  Trimmed &str: \"{raw_input}\"");
-
-    // Shadow 2: Change TYPE from &str to u32
-    let raw_input: u32 = raw_input.parse().expect("Failed to parse into number");
-    println!("  Transformed to u32: {raw_input}");
-
-    // Shadow 3: Scale value
-    let raw_input = raw_input * 2;
-    println!("  Scaled (u32 * 2): {raw_input}");
-}
-
-fn run_interactive_cli() {
-    let name = prompt_input("Enter your name (or press enter for 'Explorer'): ");
-    let name = if name.is_empty() { "Explorer".to_string() } else { name };
-
-    let current_year = 2026;
-    let birth_year_str = prompt_input("Enter your birth year (e.g. 2000): ");
-    
-    // Expression-based parsing with fallback
-    let birth_year: i32 = match birth_year_str.trim().parse() {
-        Ok(year) => year,
-        Err(_) => {
-            println!("  [!] Invalid year entered. Defaulting to 2000.");
-            2000
         }
+    
     };
 
-    let age = calculate_age(birth_year, current_year);
-    let category = classify_stage(age);
+    // 2. Quantity (fixed for now, or easily expanded)
+    let quantity = 5;
 
-    println!("\n  Hello, {name}!");
-    println!("  Calculated Age: {age} years");
-    println!("  Life Stage Category: {category}");
-}
+    // 3. Compute total using a custom expression-based function
+    let total = calculate_total(price, quantity);
 
-// Helpers demonstrating Expression-based returns (no 'return' keyword, no trailing semicolon)
-fn calculate_age(birth_year: i32, current_year: i32) -> i32 {
-    if birth_year > current_year {
-        0
+    // 4. Compute discount using an expression-based if/else
+    let discount = if total > 100 {
+        20
     } else {
-        current_year - birth_year
-    }
+        5
+    };
+
+    // 5. Compute final price
+    let final_price = total - discount;
+    // 6. Print summary
+    println!("\n---------------- Summary ----------------");
+    println!("Unit Price:  ${price}");
+    println!("Quantity:    {quantity}");
+    println!("Subtotal:    ${total}");
+    println!("Discount:   -${discount}");
+    println!("-----------------------------------------");
+    println!("Final Price: ${final_price}");
+    println!("=========================================");
+    demonstrate_for_loop();
+    demonstrate_while_loop();
 }
 
-fn classify_stage(age: i32) -> &'static str {
-    match age {
-        0..=2 => "Infant",
-        3..=12 => "Child",
-        13..=19 => "Teenager",
-        20..=35 => "Young Adult",
-        36..=59 => "Adult",
-        _ => "Senior / Veteran",
-    }
+// Helper function: returns price * quantity (expression-based return)
+fn calculate_total(price: i32, quantity: i32) -> i32 {
+    price * quantity
 }
 
-fn prompt_input(message: &str) -> String {
-    print!("{message}");
-    io::stdout().flush().expect("Failed to flush stdout");
+fn demonstrate_for_loop() {
+    for count in (1..=100).rev() {
+        println!("{count}...");
+    }
+    println!("Blast off!!");
+}
 
-    let mut buffer = String::new();
-    io::stdin()
-        .read_line(&mut buffer)
-        .expect("Failed to read line from stdin");
-
-    buffer.trim().to_string()
+fn demonstrate_while_loop() {
+    let mut battery = 0;
+    while battery < 100 {
+        battery += 25;
+        println!("charging... {battery}%");
+    }
+    println!("Phone charged.")
 }
