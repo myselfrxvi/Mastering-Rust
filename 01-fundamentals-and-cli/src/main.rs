@@ -52,6 +52,7 @@ fn main() {
     println!("=========================================");
     demonstrate_for_loop();
     demonstrate_while_loop();
+    demonstrate_loop_labels();
 }
 
 // Helper function: returns price * quantity (expression-based return)
@@ -74,3 +75,26 @@ fn demonstrate_while_loop() {
     }
     println!("Phone charged.")
 }
+
+fn demonstrate_loop_labels() {
+    let mut outer_count = 0;
+
+    'outer: loop {
+        println!("Outer loop: {outer_count}");
+        let mut inner_count = 0;
+
+        loop {
+            println!("Inner loop: {inner_count}");
+            if inner_count == 2 {
+                break;
+            }
+            if outer_count == 1{
+                println!("Target reached!");
+                break 'outer;
+            }
+            inner_count += 1;
+        }
+        outer_count += 1;
+        }
+        println!("Loop finished.");
+    }
